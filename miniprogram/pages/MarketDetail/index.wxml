@@ -1,0 +1,8 @@
+<view class="container">
+  <view class="form-group">
+    <view class="form-cell">
+      <view class="form-cell_title">{{todo.title}}</view>
+      <view class="form-cell_desc">{{todo.desc}}</view>
+    </view>
+  </view>
+</view>

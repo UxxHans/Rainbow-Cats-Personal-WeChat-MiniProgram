@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "mp-badge": "../../miniprogram_npm/weui-miniprogram/badge/badge",
+    "mp-slideview": "../../miniprogram_npm/weui-miniprogram/slideview/slideview"
+  }
+}

@@ -1,0 +1,26 @@
+<wxs module="util" src="../util.wxs" />
+<view class="container">
+  <view class="form-group">
+    <view class="form-cell">
+      <view class="form-cell_title">商品名称</view>
+      <input class="form-cell_input" placeholder="商品名称是啥? (10字以内)" placeholder-class="form-cell_title-placeholder"
+        bindinput="onTitleInput" value="{{title}}" />
+    </view>
+    <view class="form-cell">
+      <view class="form-cell_title">商品详情</view>
+      <textarea class="form-cell_input" placeholder="商品能做什么呢? (100字以内)" placeholder-class="form-cell_title-placeholder"
+        bindinput="onDescInput" value="{{desc}}" />
+    </view>
+  </view>
+
+  <view class="form-group">
+    <view class="form-cell">
+      <view class="form-cell_title">价格 (积分数量是多少呢?)</view>
+      <input class="form-cell_input" bindinput="onPriceInput" type="number" value="{{price}}" />
+    </view>
+  </view>
+  <view class="footer">
+    <view class="reset" bindtap="resetItem">重置</view>
+    <view class="save" bindtap="saveItem">保存</view>
+  </view>
+</view>

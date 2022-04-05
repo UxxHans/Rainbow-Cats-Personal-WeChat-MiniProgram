@@ -1,0 +1,105 @@
+/* miniprogram/pages/list/index.wxss */
+
+.container.empty {
+  background: white;
+}
+
+.background {
+  width: 70vw;
+  margin-top: 5vh;
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.subtitle {
+  margin-top: 9px;
+  font-size: 14px;
+}
+
+.form-cell {
+  padding: 0;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  align-self: flex-start;
+  transform: translateY(5px);
+}
+
+.todo-info {
+  width: auto;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column
+}
+
+.todo-info_title {
+  font-size: 18px;
+}
+.todo-info_author {
+  width: 70px;
+  height: 100%;
+  position: absolute;
+  right: 10%;
+  bottom: 0;
+}
+.todo-info_award {
+  font-size: 10px;
+}
+.todo-info_desc {
+  font-size: 10px;
+  color: #BDBDBD;
+}
+.star {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.starBtn .weui-slideview__btn {
+  background-color: gold;
+}
+
+.file {
+  width: 25px;
+  height: 25px;
+  margin-left: auto;
+  margin-right: 22px;
+}
+
+.btn-normal{
+  margin: 10%;
+  background-color: #ff99aa;
+  color: black;
+}
+
+.btn-small{
+  margin: 5%;
+  background-color: #ff99aa;
+  color: black;
+}
+
+.btn-hover{
+  background-color: lightgray;
+  color: black;
+}
+
+.todo-info_title.done {
+  text-decoration: line-through;
+  color: #8D8D8D;
+}

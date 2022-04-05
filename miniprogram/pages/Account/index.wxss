@@ -1,0 +1,18 @@
+.slide {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.form-cell {
+  padding: 0;
+}
+
+.info_title {
+  font-size: 18px;
+}
+
+.info_subtitle{
+  font-size: 18px;
+}

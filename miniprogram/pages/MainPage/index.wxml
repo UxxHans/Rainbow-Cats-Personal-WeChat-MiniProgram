@@ -1,0 +1,15 @@
+<view style="width:100%; background: none;">
+    <image style="position: relative; height: 100%; width: 100%; top: 0;" mode="widthFix" src="../../images/Home/HomeCover.jpg"/>
+    <view class="form-group">
+    <view class="form-cell">
+      <view class="slide">
+        <view class="info_title">欢迎！蓝卡比和红卡比！</view>
+      </view>
+    </view>
+    <view class="form-cell">
+      <view class="slide">
+        <view class="info_title">来点儿新点子吧！</view>
+      </view>
+    </view>
+  </view>
+</view>

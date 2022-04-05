@@ -1,0 +1,16 @@
+/* miniprogram/pages/list/index.wxss */
+
+.form-cell {
+  padding: 0;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.info_title {
+  font-size: 17px;
+}
