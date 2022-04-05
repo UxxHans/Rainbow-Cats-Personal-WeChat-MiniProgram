@@ -19,3 +19,11 @@ module.exports = {
   }]
 }
 ```
+
+## 效果
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/1.jpg)
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/2.jpg)
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/3.jpg)
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/4.jpg)
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/5.jpg)
+![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/6.jpg)
