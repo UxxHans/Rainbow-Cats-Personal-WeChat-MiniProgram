@@ -9,9 +9,7 @@
 - 在左上角点击【云开发】按钮，进入云开发控制台。
 - 如果没有环境则按照提示开通云开发环境
 - 进入云开发环境，在【设置】页复制`环境ID`
-- 在控制台数据库页，创建云开发数据库集合 'MarketList'， 'MissionList' 和 'UserList':在这个集合里面创建两个数据，里面创建两个值：_openid(string类), credit(number类)
-- 右键点击 `cloudfunctions/getOpenId` 文件夹，选择云函数云端安装依赖上传
-- 如果在新建项目时，小程序下有云开发环境，则会默认注入第一个环境，如果想更换为自己想要的环境，只需要将 `miniprogram/envList.js` 文件里的内容全部替换成如下，注意替换envId
+- 将 `miniprogram/envList.js` 文件里的内容全部替换成如下，注意替换envId
 ``` js
 module.exports = {
   envList: [{
@@ -19,6 +17,14 @@ module.exports = {
   }]
 }
 ```
+
+- 在控制台数据库页，创建云开发数据库集合 'MarketList'， 'MissionList' 和 'UserList':在这个集合里面创建两个数据，里面创建两个值：_openid(string类), credit(number类)，credit设置为零 。（openid具体数据稍后再填）
+- 选择云开发里数据库三个选项中的最后一个 数据权限，选择自定义，然后点击新窗口下面蓝色加亮文字，这个时候文本框里面应该已经写好了两行，把那个没有设置为true的也设置为true。接下来重复此步骤 把剩下两个数据集合的权限也设置好。（没有设置会导致你们互相看不到彼此发的任务和商品，也无法赚积分）
+- 右键点击 `cloudfunctions/getOpenId` 文件夹，选择云函数云端安装依赖上传
+- 然后创建体验版小程序 分享到女朋友手机上 具体方法要先登录微信公众平台官网
+- 在两个手机上运行小程序 分别在两个手机上的小程序里新建任务 然后回到missionlist数据库集合去找自己和女朋友的_openid变量
+- 把这两个openid拷贝到UserList数据集合里刚刚创建的的_openid变量中 同时也要把他们拷到app.js里的kirbyOpenId和deeOpenId的值里（kirbyOpenId是星之卡比，deeOpenId是瓦豆鲁迪）
+- 然后再试试看是不是成功了！不行就问我。
 
 ## 效果
 ![alt text](https://github.com/UxxHans/Rainbow-Cats-Personal-WeChat-MiniProgram/blob/main/Pictures/main.jpg)
