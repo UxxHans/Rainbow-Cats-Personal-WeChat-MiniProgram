@@ -175,7 +175,7 @@ Page({
 
         // Add Credit
         db.collection(getApp().globalData.collectionUserList).where({
-          _openid: mission._openid
+          _openid: openid
         }).update({
           data: {
             credit: _.inc(mission.award)
