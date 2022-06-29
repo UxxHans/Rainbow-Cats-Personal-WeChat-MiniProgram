@@ -109,17 +109,20 @@ Page({
         duration: 2000
       })
       return
-    }
-    await wx.cloud.callFunction({name: 'addElement', data: this.data}).then(
-        () => {
+    }else{
+        await wx.cloud.callFunction({name: 'addElement', data: this.data}).then(
+            () => {
+                wx.showToast({
+                    title: '添加成功',
+                    icon: 'success',
+                    duration: 1000
+                })
+            }
+        )
+        setTimeout(function () {
             wx.navigateBack()
-            wx.showToast({
-                title: '添加成功',
-                icon: 'success',
-                duration: 2000
-            })
-        }
-    )
+        }, 1000)
+    }
   },
 
   // 重置所有表单项
