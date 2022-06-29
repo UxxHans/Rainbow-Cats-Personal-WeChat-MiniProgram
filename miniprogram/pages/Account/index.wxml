@@ -20,7 +20,6 @@
         <view class="slide" data-index="{{index}}" bindtap="toDetailPageUpper">
           <view class="item-info">
             <view class="item-info_title">{{util.filterStr(item.title, 10)}}</view>
-            <view class="item-info_award">💰 {{util.filterStr(item.credit, 10)}} 积分</view>
             <view class="item-info_date">📅 {{util.cutStr(item.date, 10)}} 购买</view>
           </view>
           <image wx:if="{{item.star}}" class="star" src="Images/Star.png" />
@@ -37,7 +36,6 @@
         <view class="slide" data-index="{{index}}" bindtap="toDetailPageLower">
           <view class="item-info">
             <view class="item-info_title">{{util.filterStr(item.title, 10)}}</view>
-            <view class="item-info_award">💰 {{util.filterStr(item.credit, 10)}} 积分</view>
             <view class="item-info_date">📅 {{util.cutStr(item.date, 10)}} 购买</view>
           </view>
           <image wx:if="{{item.star}}" class="star" src="Images/Star.png" />
