@@ -1,0 +1,141 @@
+import { LogicCommand } from './logic';
+import { SYMBOL_QUERY_COMMAND } from '../helper/symbol';
+import { Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon } from '../geo/index';
+import { isNumber } from '../utils/type';
+import { Validate } from '../validate';
+export const EQ = 'eq';
+export const NEQ = 'neq';
+export const GT = 'gt';
+export const GTE = 'gte';
+export const LT = 'lt';
+export const LTE = 'lte';
+export const IN = 'in';
+export const NIN = 'nin';
+export const ALL = 'all';
+export const ELEM_MATCH = 'elemMatch';
+export const EXISTS = 'exists';
+export const SIZE = 'size';
+export const MOD = 'mod';
+export var QUERY_COMMANDS_LITERAL;
+(function (QUERY_COMMANDS_LITERAL) {
+    QUERY_COMMANDS_LITERAL["EQ"] = "eq";
+    QUERY_COMMANDS_LITERAL["NEQ"] = "neq";
+    QUERY_COMMANDS_LITERAL["GT"] = "gt";
+    QUERY_COMMANDS_LITERAL["GTE"] = "gte";
+    QUERY_COMMANDS_LITERAL["LT"] = "lt";
+    QUERY_COMMANDS_LITERAL["LTE"] = "lte";
+    QUERY_COMMANDS_LITERAL["IN"] = "in";
+    QUERY_COMMANDS_LITERAL["NIN"] = "nin";
+    QUERY_COMMANDS_LITERAL["ALL"] = "all";
+    QUERY_COMMANDS_LITERAL["ELEM_MATCH"] = "elemMatch";
+    QUERY_COMMANDS_LITERAL["EXISTS"] = "exists";
+    QUERY_COMMANDS_LITERAL["SIZE"] = "size";
+    QUERY_COMMANDS_LITERAL["MOD"] = "mod";
+    QUERY_COMMANDS_LITERAL["GEO_NEAR"] = "geoNear";
+    QUERY_COMMANDS_LITERAL["GEO_WITHIN"] = "geoWithin";
+    QUERY_COMMANDS_LITERAL["GEO_INTERSECTS"] = "geoIntersects";
+})(QUERY_COMMANDS_LITERAL || (QUERY_COMMANDS_LITERAL = {}));
+export class QueryCommand extends LogicCommand {
+    constructor(operator, operands, fieldName) {
+        super(operator, operands, fieldName);
+        this.operator = operator;
+        this._internalType = SYMBOL_QUERY_COMMAND;
+    }
+    toJSON() {
+        switch (this.operator) {
+            case QUERY_COMMANDS_LITERAL.IN:
+            case QUERY_COMMANDS_LITERAL.NIN:
+                return {
+                    ['$' + this.operator]: this.operands
+                };
+            case QUERY_COMMANDS_LITERAL.NEQ:
+                return {
+                    ['$ne']: this.operands[0]
+                };
+            default:
+                return {
+                    ['$' + this.operator]: this.operands[0]
+                };
+        }
+    }
+    _setFieldName(fieldName) {
+        const command = new QueryCommand(this.operator, this.operands, fieldName);
+        return command;
+    }
+    eq(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.EQ, [val], this.fieldName);
+        return this.and(command);
+    }
+    neq(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.NEQ, [val], this.fieldName);
+        return this.and(command);
+    }
+    gt(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.GT, [val], this.fieldName);
+        return this.and(command);
+    }
+    gte(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.GTE, [val], this.fieldName);
+        return this.and(command);
+    }
+    lt(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.LT, [val], this.fieldName);
+        return this.and(command);
+    }
+    lte(val) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.LTE, [val], this.fieldName);
+        return this.and(command);
+    }
+    in(list) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.IN, list, this.fieldName);
+        return this.and(command);
+    }
+    nin(list) {
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.NIN, list, this.fieldName);
+        return this.and(command);
+    }
+    geoNear(val) {
+        if (!(val.geometry instanceof Point)) {
+            throw new TypeError(`"geometry" must be of type Point. Received type ${typeof val.geometry}`);
+        }
+        if (val.maxDistance !== undefined && !isNumber(val.maxDistance)) {
+            throw new TypeError(`"maxDistance" must be of type Number. Received type ${typeof val.maxDistance}`);
+        }
+        if (val.minDistance !== undefined && !isNumber(val.minDistance)) {
+            throw new TypeError(`"minDistance" must be of type Number. Received type ${typeof val.minDistance}`);
+        }
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.GEO_NEAR, [val], this.fieldName);
+        return this.and(command);
+    }
+    geoWithin(val) {
+        if (!(val.geometry instanceof MultiPolygon) &&
+            !(val.geometry instanceof Polygon) &&
+            !Validate.isCentersPhere(val.centerSphere)) {
+            throw new TypeError(`"geometry" must be of type Polygon or MultiPolygon. Received type ${typeof val.geometry}`);
+        }
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.GEO_WITHIN, [val], this.fieldName);
+        return this.and(command);
+    }
+    geoIntersects(val) {
+        if (!(val.geometry instanceof Point) &&
+            !(val.geometry instanceof LineString) &&
+            !(val.geometry instanceof Polygon) &&
+            !(val.geometry instanceof MultiPoint) &&
+            !(val.geometry instanceof MultiLineString) &&
+            !(val.geometry instanceof MultiPolygon)) {
+            throw new TypeError(`"geometry" must be of type Point, LineString, Polygon, MultiPoint, MultiLineString or MultiPolygon. Received type ${typeof val.geometry}`);
+        }
+        const command = new QueryCommand(QUERY_COMMANDS_LITERAL.GEO_INTERSECTS, [val], this.fieldName);
+        return this.and(command);
+    }
+}
+export function isQueryCommand(object) {
+    return object && object instanceof QueryCommand && object._internalType === SYMBOL_QUERY_COMMAND;
+}
+export function isKnownQueryCommand(object) {
+    return isQueryCommand(object) && object.operator.toUpperCase() in QUERY_COMMANDS_LITERAL;
+}
+export function isComparisonCommand(object) {
+    return isQueryCommand(object);
+}
+export default QueryCommand;

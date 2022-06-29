@@ -1,0 +1,251 @@
+import { isQueryCommand, isComparisonCommand, QUERY_COMMANDS_LITERAL } from '../commands/query';
+import { isLogicCommand, LOGIC_COMMANDS_LITERAL } from '../commands/logic';
+import { SYMBOL_UNSET_FIELD_NAME, SYMBOL_GEO_POINT } from '../helper/symbol';
+import { getType, isObject, isArray, isRegExp, isDate } from '../utils/type';
+import { operatorToString } from '../operator-map';
+import { flattenQueryObject, isConversionRequired, encodeInternalDataType } from './common';
+import { stringifyByEJSON } from '../utils/utils';
+import { Validate } from '../validate';
+export class QuerySerializer {
+    constructor() { }
+    static encode(query) {
+        const encoder = new QueryEncoder();
+        return encoder.encodeQuery(query);
+    }
+    static encodeEJSON(query, raw) {
+        const encoder = new QueryEncoder();
+        return stringifyByEJSON(raw ? query : encoder.encodeQuery(query));
+    }
+}
+class QueryEncoder {
+    encodeQuery(query, key) {
+        if (isConversionRequired(query)) {
+            if (isLogicCommand(query)) {
+                return this.encodeLogicCommand(query);
+            }
+            else if (isQueryCommand(query)) {
+                return this.encodeQueryCommand(query);
+            }
+            else if (isRegExp(query)) {
+                return { [key]: this.encodeRegExp(query) };
+            }
+            else if (isDate(query)) {
+                return { [key]: query };
+            }
+            else {
+                return { [key]: this.encodeQueryObject(query) };
+            }
+        }
+        else {
+            if (isObject(query)) {
+                return this.encodeQueryObject(query);
+            }
+            else {
+                return query;
+            }
+        }
+    }
+    encodeRegExp(query) {
+        return {
+            $regularExpression: {
+                pattern: query.source,
+                options: query.flags
+            }
+        };
+    }
+    encodeLogicCommand(query) {
+        switch (query.operator) {
+            case LOGIC_COMMANDS_LITERAL.NOR:
+            case LOGIC_COMMANDS_LITERAL.AND:
+            case LOGIC_COMMANDS_LITERAL.OR: {
+                const $op = operatorToString(query.operator);
+                const subqueries = query.operands.map((oprand) => this.encodeQuery(oprand, query.fieldName));
+                return {
+                    [$op]: subqueries
+                };
+            }
+            case LOGIC_COMMANDS_LITERAL.NOT: {
+                const $op = operatorToString(query.operator);
+                const operatorExpression = query.operands[0];
+                if (isRegExp(operatorExpression)) {
+                    return {
+                        [query.fieldName]: {
+                            [$op]: this.encodeRegExp(operatorExpression)
+                        }
+                    };
+                }
+                else {
+                    const subqueries = this.encodeQuery(operatorExpression)[query.fieldName];
+                    return {
+                        [query.fieldName]: {
+                            [$op]: subqueries
+                        }
+                    };
+                }
+            }
+            default: {
+                const $op = operatorToString(query.operator);
+                if (query.operands.length === 1) {
+                    const subquery = this.encodeQuery(query.operands[0]);
+                    return {
+                        [$op]: subquery
+                    };
+                }
+                else {
+                    const subqueries = query.operands.map(this.encodeQuery.bind(this));
+                    return {
+                        [$op]: subqueries
+                    };
+                }
+            }
+        }
+    }
+    encodeQueryCommand(query) {
+        if (isComparisonCommand(query)) {
+            return this.encodeComparisonCommand(query);
+        }
+        else {
+            return this.encodeComparisonCommand(query);
+        }
+    }
+    encodeComparisonCommand(query) {
+        if (query.fieldName === SYMBOL_UNSET_FIELD_NAME) {
+            throw new Error('Cannot encode a comparison command with unset field name');
+        }
+        const $op = operatorToString(query.operator);
+        switch (query.operator) {
+            case QUERY_COMMANDS_LITERAL.EQ:
+            case QUERY_COMMANDS_LITERAL.NEQ:
+            case QUERY_COMMANDS_LITERAL.LT:
+            case QUERY_COMMANDS_LITERAL.LTE:
+            case QUERY_COMMANDS_LITERAL.GT:
+            case QUERY_COMMANDS_LITERAL.GTE:
+            case QUERY_COMMANDS_LITERAL.ELEM_MATCH:
+            case QUERY_COMMANDS_LITERAL.EXISTS:
+            case QUERY_COMMANDS_LITERAL.SIZE:
+            case QUERY_COMMANDS_LITERAL.MOD: {
+                return {
+                    [query.fieldName]: {
+                        [$op]: encodeInternalDataType(query.operands[0])
+                    }
+                };
+            }
+            case QUERY_COMMANDS_LITERAL.IN:
+            case QUERY_COMMANDS_LITERAL.NIN:
+            case QUERY_COMMANDS_LITERAL.ALL: {
+                return {
+                    [query.fieldName]: {
+                        [$op]: encodeInternalDataType(query.operands)
+                    }
+                };
+            }
+            case QUERY_COMMANDS_LITERAL.GEO_NEAR: {
+                const options = query.operands[0];
+                return {
+                    [query.fieldName]: {
+                        $nearSphere: {
+                            $geometry: options.geometry.toJSON(),
+                            $maxDistance: options.maxDistance,
+                            $minDistance: options.minDistance
+                        }
+                    }
+                };
+            }
+            case QUERY_COMMANDS_LITERAL.GEO_WITHIN: {
+                const options = query.operands[0];
+                if (options.centerSphere) {
+                    Validate.isCentersPhere(options.centerSphere);
+                    const centerSphere = options.centerSphere;
+                    if (centerSphere[0]._internalType === SYMBOL_GEO_POINT) {
+                        return {
+                            [query.fieldName]: {
+                                $geoWithin: {
+                                    $centerSphere: [centerSphere[0].toJSON().coordinates, centerSphere[1]]
+                                }
+                            }
+                        };
+                    }
+                    return {
+                        [query.fieldName]: {
+                            $geoWithin: {
+                                $centerSphere: options.centerSphere
+                            }
+                        }
+                    };
+                }
+                return {
+                    [query.fieldName]: {
+                        $geoWithin: {
+                            $geometry: options.geometry.toJSON()
+                        }
+                    }
+                };
+            }
+            case QUERY_COMMANDS_LITERAL.GEO_INTERSECTS: {
+                const options = query.operands[0];
+                return {
+                    [query.fieldName]: {
+                        $geoIntersects: {
+                            $geometry: options.geometry.toJSON()
+                        }
+                    }
+                };
+            }
+            default: {
+                return {
+                    [query.fieldName]: {
+                        [$op]: encodeInternalDataType(query.operands[0])
+                    }
+                };
+            }
+        }
+    }
+    encodeQueryObject(query) {
+        const flattened = flattenQueryObject(query);
+        for (const key in flattened) {
+            const val = flattened[key];
+            if (isLogicCommand(val)) {
+                flattened[key] = val._setFieldName(key);
+                const condition = this.encodeLogicCommand(flattened[key]);
+                this.mergeConditionAfterEncode(flattened, condition, key);
+            }
+            else if (isComparisonCommand(val)) {
+                flattened[key] = val._setFieldName(key);
+                const condition = this.encodeComparisonCommand(flattened[key]);
+                this.mergeConditionAfterEncode(flattened, condition, key);
+            }
+            else if (isConversionRequired(val)) {
+                flattened[key] = encodeInternalDataType(val);
+            }
+        }
+        return flattened;
+    }
+    mergeConditionAfterEncode(query, condition, key) {
+        if (!condition[key]) {
+            delete query[key];
+        }
+        for (const conditionKey in condition) {
+            if (query[conditionKey]) {
+                if (isArray(query[conditionKey])) {
+                    query[conditionKey] = query[conditionKey].concat(condition[conditionKey]);
+                }
+                else if (isObject(query[conditionKey])) {
+                    if (isObject(condition[conditionKey])) {
+                        Object.assign(query, condition);
+                    }
+                    else {
+                        console.warn(`unmergable condition, query is object but condition is ${getType(condition)}, can only overwrite`, condition, key);
+                        query[conditionKey] = condition[conditionKey];
+                    }
+                }
+                else {
+                    console.warn(`to-merge query is of type ${getType(query)}, can only overwrite`, query, condition, key);
+                    query[conditionKey] = condition[conditionKey];
+                }
+            }
+            else {
+                query[conditionKey] = condition[conditionKey];
+            }
+        }
+    }
+}

@@ -1,0 +1,103 @@
+  .background {
+    width: 70vw;
+    margin-top: 5vh;
+  }
+  
+  .title {
+    margin-top: 20px;
+    font-size: 17px;
+    font-weight: bold;
+  }
+  .subtitle {
+    margin-top: 9px;
+    font-size: 12px;
+  }
+  
+  .swiper-image{
+    display: block;
+    height: 100%; 
+    width: 100%;
+    background-color: darkgray;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .form-cell {padding: 0;}
+  .slide {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+  }
+  
+  .item-info {
+    width: auto;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column
+  }
+  .item-info_title {
+    font-size: 18px;
+  }
+  .item-info_desc {
+    font-size: 10px;
+    color: #BDBDBD;
+  }
+  .item-info_date {
+    font-size: 10px;
+    color: #BDBDBD;
+  }
+  .item-info_author {
+    width: 70px;
+    height: 100%;
+    position: absolute;
+    right: 10%;
+    bottom: 0;
+  }
+  .item-info_award {
+    font-size: 10px;
+  }
+  .star {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  
+  .useBtn .weui-slideview__btn {background-color: greenyellow;}
+  .starBtn .weui-slideview__btn {background-color: gold;}
+  .removeBtn .weui-slideview__btn {background-color: lightsalmon;}
+  
+  .btn-normal{
+    margin: 2%;
+    color: white;
+    background-color: #3d3d3d;
+  }
+  .btn-hover{
+    color: black;
+    background-color: gray;
+  }
+  
+  .search-bar {
+    position: relative;
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    background-color: #EFEFF4;
+    border: 1rpx solid #E6E6EA;
+    border-radius: 5px;
+  }
+  .search-input {
+    position: relative;
+    left: 28px;
+    height: 28px;
+    width: 80%;
+    line-height: 28px;
+    font-size: 14px;
+  }
+  .search-icon {
+    position: absolute;
+    margin: 2px;
+  }

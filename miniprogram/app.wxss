@@ -1,0 +1,80 @@
+/* 引入 weui 组件 */
+@import './miniprogram_npm/weui-miniprogram/weui-wxss/dist/style/weui.wxss';
+
+page {
+  --footer-height: 10vh;
+  --button-size: 16vw;
+  --button-color: #353535;
+  --button-icon-size: 6vw;
+}
+
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.container.white{
+    background-color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin-bottom: 80px;
+}
+
+button {
+  background: initial;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button::after {
+  border: none;
+}
+
+.form-group {
+  width: calc(100% - 40px);
+  margin: 10px 20px;
+  border-radius: 10px;
+  background: white;
+}
+
+.form-group_label {
+  align-self: flex-start;
+  margin-top: 20px;
+  margin-left: 20px;
+  color: #8D8D8D;
+  font-size: 15px;
+}
+
+.form-group_label:not(:first-child) {
+  margin-top: 20px;
+}
+
+.form-cell {
+  padding: 20px 15px;
+}
+
+.form-cell:not(:last-child) {
+  border-bottom: rgba(0, 0, 0, 0.05) solid 1px;
+}
+
+.form-cell.inline {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@keyframes animation-blur {
+    from {filter: blur(7px);}
+    to {filter: blur(0px);}
+}

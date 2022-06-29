@@ -1,0 +1,16 @@
+// 限制字符串显示长度
+var filterStr = function (str, limit) {
+  return str.length > limit ? str.substring(0, limit) + "..." : str
+}
+var cutStr = function (str, limit) {
+  return str.length > limit ? str.substring(0, limit) : str
+}
+var sliceStr = function (str, from, to) {
+  return str.substring(from, to)
+}
+
+module.exports = {
+  filterStr: filterStr,
+  cutStr: cutStr,
+  sliceStr: sliceStr
+}

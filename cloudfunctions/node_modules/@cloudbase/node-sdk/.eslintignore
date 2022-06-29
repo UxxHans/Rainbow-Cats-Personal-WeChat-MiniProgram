@@ -1,0 +1,5 @@
+lib/
+types/
+coverage/
+node_modules
+test/

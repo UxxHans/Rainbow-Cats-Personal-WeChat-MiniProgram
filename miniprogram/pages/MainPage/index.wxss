@@ -1,0 +1,24 @@
+.form-cell {
+  padding: 0;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+}
+
+.title {
+  font-size: 12px;
+}
+
+.swiper-image{
+  display: block;
+  height: 100%; 
+  width: 100%;
+  position: relative;
+  background-color: darkgray;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

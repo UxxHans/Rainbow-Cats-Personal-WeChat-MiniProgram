@@ -1,0 +1,13 @@
+export declare const getType: (x: any) => string;
+export declare const isObject: <T extends object>(x: any) => x is T;
+export declare const isString: (x: any) => x is string;
+export declare const isNumber: (x: any) => x is number;
+export declare const isPromise: <T extends Promise<any> = Promise<any>>(x: any) => x is T;
+declare type AnyFn = (...args: any[]) => any;
+export declare const isFunction: <T extends AnyFn = AnyFn>(x: any) => x is T;
+export declare const isArray: <T extends any[] = any[]>(x: any) => x is T;
+export declare const isDate: (x: any) => x is Date;
+export declare const isRegExp: (x: any) => x is RegExp;
+export declare const isInternalObject: (x: any) => boolean;
+export declare const isPlainObject: (obj: any) => obj is object;
+export {};

@@ -1,0 +1,51 @@
+declare enum ErrorCode {
+    DocIDError = "\u6587\u6863ID\u4E0D\u5408\u6CD5",
+    CollNameError = "\u96C6\u5408\u540D\u79F0\u4E0D\u5408\u6CD5",
+    OpStrError = "\u64CD\u4F5C\u7B26\u4E0D\u5408\u6CD5",
+    DirectionError = "\u6392\u5E8F\u5B57\u7B26\u4E0D\u5408\u6CD5",
+    IntergerError = "must be integer",
+    QueryParamTypeError = "\u67E5\u8BE2\u53C2\u6570\u5FC5\u987B\u4E3A\u5BF9\u8C61",
+    QueryParamValueError = "\u67E5\u8BE2\u53C2\u6570\u5BF9\u8C61\u503C\u4E0D\u80FD\u5747\u4E3Aundefined"
+}
+declare const FieldType: {
+    String: string;
+    Number: string;
+    Object: string;
+    Array: string;
+    Boolean: string;
+    Null: string;
+    GeoPoint: string;
+    GeoLineString: string;
+    GeoPolygon: string;
+    GeoMultiPoint: string;
+    GeoMultiLineString: string;
+    GeoMultiPolygon: string;
+    Timestamp: string;
+    Command: string;
+    ServerDate: string;
+    BsonDate: string;
+};
+declare type OrderByDirection = 'desc' | 'asc';
+declare const OrderDirectionList: string[];
+declare type WhereFilterOp = '<' | '<=' | '==' | '>=' | '>';
+declare const WhereFilterOpList: string[];
+declare enum Opeartor {
+    lt = "<",
+    gt = ">",
+    lte = "<=",
+    gte = ">=",
+    eq = "=="
+}
+declare const OperatorMap: {
+    [Opeartor.eq]: string;
+    [Opeartor.lt]: string;
+    [Opeartor.lte]: string;
+    [Opeartor.gt]: string;
+    [Opeartor.gte]: string;
+};
+declare const UpdateOperatorList: string[];
+declare enum QueryType {
+    WHERE = "WHERE",
+    DOC = "DOC"
+}
+export { ErrorCode, FieldType, WhereFilterOp, WhereFilterOpList, Opeartor, OperatorMap, OrderByDirection, OrderDirectionList, UpdateOperatorList, QueryType };

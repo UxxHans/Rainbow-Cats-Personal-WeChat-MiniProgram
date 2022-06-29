@@ -1,0 +1,126 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const bson_1 = require("bson");
+const index_1 = require("./index");
+class DocumentSnapshot {
+    constructor(data, requestId) {
+        this._data = data;
+        this.requestId = requestId;
+    }
+    data() {
+        return this._data;
+    }
+}
+const START = 'database.startTransaction';
+const COMMIT = 'database.commitTransaction';
+const ABORT = 'database.abortTransaction';
+const GET_DOC = 'database.getInTransaction';
+const UPDATE_DOC = 'database.updateDocInTransaction';
+const DELETE_DOC = 'database.deleteDocInTransaction';
+class Transaction {
+    constructor(db) {
+        this._db = db;
+        this._request = new index_1.Db.reqClass(this._db.config);
+    }
+    async init() {
+        const res = await this._request.send(START, {});
+        if (res.code) {
+            throw res;
+        }
+        this._id = res.transactionId;
+    }
+    async get(documentRef) {
+        const param = {
+            collectionName: documentRef._coll,
+            transactionId: this._id,
+            _id: documentRef.id
+        };
+        const res = await this._request.send(GET_DOC, param);
+        if (res.code)
+            throw res;
+        return new DocumentSnapshot(bson_1.EJSON.parse(res.data), res.requestId);
+    }
+    async set(documentRef, data) {
+        const param = {
+            collectionName: documentRef._coll,
+            transactionId: this._id,
+            _id: documentRef.id,
+            data: bson_1.EJSON.stringify(data, { relaxed: false }),
+            upsert: true
+        };
+        const res = await this._request.send(UPDATE_DOC, param);
+        if (res.code)
+            throw res;
+        return Object.assign(Object.assign({}, res), { updated: bson_1.EJSON.parse(res.updated), upserted: res.upserted
+                ? JSON.parse(res.upserted)
+                : null });
+    }
+    async update(documentRef, data) {
+        const param = {
+            collectionName: documentRef._coll,
+            transactionId: this._id,
+            _id: documentRef.id,
+            data: bson_1.EJSON.stringify({
+                $set: data
+            }, {
+                relaxed: false
+            })
+        };
+        const res = await this._request.send(UPDATE_DOC, param);
+        if (res.code)
+            throw res;
+        return Object.assign(Object.assign({}, res), { updated: bson_1.EJSON.parse(res.updated) });
+    }
+    async delete(documentRef) {
+        const param = {
+            collectionName: documentRef._coll,
+            transactionId: this._id,
+            _id: documentRef.id
+        };
+        const res = await this._request.send(DELETE_DOC, param);
+        if (res.code)
+            throw res;
+        return Object.assign(Object.assign({}, res), { deleted: bson_1.EJSON.parse(res.deleted) });
+    }
+    async commit() {
+        const param = {
+            transactionId: this._id
+        };
+        const res = await this._request.send(COMMIT, param);
+        if (res.code)
+            throw res;
+        return res;
+    }
+    async rollback() {
+        const param = {
+            transactionId: this._id
+        };
+        const res = await this._request.send(ABORT, param);
+        if (res.code)
+            throw res;
+        return res;
+    }
+}
+exports.Transaction = Transaction;
+async function startTransaction() {
+    const transaction = new Transaction(this);
+    await transaction.init();
+    return transaction;
+}
+exports.startTransaction = startTransaction;
+async function runTransaction(callback, times = 3) {
+    if (times <= 0) {
+        throw new Error('Transaction failed');
+    }
+    try {
+        const transaction = new Transaction(this);
+        await transaction.init();
+        await callback(transaction);
+        await transaction.commit();
+    }
+    catch (error) {
+        console.log(error);
+        return runTransaction.bind(this)(callback, --times);
+    }
+}
+exports.runTransaction = runTransaction;
