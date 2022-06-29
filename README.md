@@ -32,8 +32,8 @@
 - 在左上角五个选项中选择`云开发`->按照提示开通云开发(这里可以选择免费的，不过限量，我开发用的多，6块够用了)
 >![Image](Pics/DatabaseOption.jpg)
 - 进入后点击数据库->在集合名称添加四个集合：`MarketList`, `MissionList`, `StorageList`, `UserList`
-- 在`UserList`中添加两个默认记录, 在两个记录中分别添加两个字段:
 >![Image](Pics/Database.jpg)
+- 在`UserList`中添加两个默认记录, 在两个记录中分别添加两个字段:
 ```
 字段 = _openid | 类型 = string | 值 = 先不填
 字段 = credit | 类型 = number | 值 = 0
