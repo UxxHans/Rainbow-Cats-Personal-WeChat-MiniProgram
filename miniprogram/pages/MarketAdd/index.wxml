@@ -1,0 +1,27 @@
+<wxs module="util" src="../util.wxs" />
+<view class="container white" style="animation-name: animation-blur; animation-duration: 0.5s;">
+  <image src="../../images/Item.gif" mode='widthFix' />
+  <view class="form-group" style="z-index: 0; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.05); ">
+    <view class="form-cell">
+      <view class="form-cell_title">🔖选择预设</view>
+      <picker mode="selector" bindchange="onPresetChange" value="{{presetIndex}}" range="{{presets}}" range-key="name">{{presets[presetIndex].name}}</picker>
+    </view>
+    <view class="form-cell">
+      <view class="form-cell_title">📌商品名称</view>
+      <input class="form-cell_input" placeholder="商品名是什么?" placeholder-class="form-cell_placeholder" bindinput="onTitleInput" value="{{title}}" />
+    </view>
+    <view class="form-cell">
+      <view class="form-cell_title">📝商品详情</view>
+      <textarea class="form-cell_input" placeholder="商品可以做什么呢?" placeholder-class="form-cell_placeholder" bindinput="onDescInput" value="{{desc}}" />
+    </view>
+    <view class="form-cell">
+      <view class="form-cell_title">💰积分价格</view>
+      <slider min="0" max="{{maxCredit}}" block-size="15" block-color="#353535" activeColor="#ff5794" bindchange="onCreditInput" value="{{credit}}" show-value/>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="reset" bindtap="resetItem">重置</view>
+    <view class="save" bindtap="saveItem">保存</view>
+  </view>
+</view>

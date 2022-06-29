@@ -1,0 +1,17 @@
+
+
+.mission-info_title {
+  margin-bottom: 10px;
+  font-size: medium;
+}
+
+.mission-info_desc {
+  font-size: small;
+  color: darkgray;
+}
+
+.mission-info_credit {
+  font-size: small;
+  color: darkgray;
+  margin-left: 10px;
+}

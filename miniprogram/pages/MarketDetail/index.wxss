@@ -1,0 +1,15 @@
+.item-info_title {
+  margin-bottom: 10px;
+  font-size: medium;
+}
+
+.item-info_desc {
+  font-size: small;
+  color: darkgray;
+}
+
+.item-info_credit {
+  font-size: small;
+  color: darkgray;
+  margin-left: 10px;
+}

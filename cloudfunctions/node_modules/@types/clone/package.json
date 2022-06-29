@@ -1,0 +1,16 @@
+{
+    "name": "@types/clone",
+    "version": "0.1.30",
+    "description": "TypeScript definitions for clone 0.1.11",
+    "license": "MIT",
+    "author": "Kieran Simpson <https://github.com/kierans/DefinitelyTyped>",
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typings": "index.d.ts",
+    "typesPublisherContentHash": "29fd82aa066f07307712c9ce140436aba20b3bfbe9bf8f702f359c230c481f03"
+}
