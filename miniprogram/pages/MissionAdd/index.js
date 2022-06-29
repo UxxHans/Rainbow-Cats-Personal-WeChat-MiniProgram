@@ -110,7 +110,16 @@ Page({
       })
       return
     }
-    await wx.cloud.callFunction({name: 'addElement', data: this.data}).then(() => {wx.navigateBack()})
+    await wx.cloud.callFunction({name: 'addElement', data: this.data}).then(
+        () => {
+            wx.navigateBack()
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 2000
+            })
+        }
+    )
   },
 
   // 重置所有表单项
