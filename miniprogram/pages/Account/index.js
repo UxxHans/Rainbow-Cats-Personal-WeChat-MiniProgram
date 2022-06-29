@@ -1,11 +1,6 @@
 Page({
     data: {
-        creditA: 0,
-        creditB: 0,
-        
         search: "",
-        userA: '',
-        userB: '',
 
         allItems: [],
         unusedItems: [],
