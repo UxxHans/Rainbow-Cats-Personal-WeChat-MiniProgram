@@ -28,4 +28,4 @@ module.exports = {
 - 别忘了最后点击右上角上传，然后在微信公众平台网站上设置小程序为体验版，不用去发布去审核，起个好听的名字，定个LOGO。
 
 ## 效果:
-![Image](Image/main.jpg)
+![Image](Pictures/main.jpg)
