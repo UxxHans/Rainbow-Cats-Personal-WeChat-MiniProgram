@@ -1,0 +1,100 @@
+import { Db } from '../index';
+import { CollectionReference } from '../collection';
+import { ERRORS } from '../const/code';
+const START = 'database.startTransaction';
+const COMMIT = 'database.commitTransaction';
+const ABORT = 'database.abortTransaction';
+export class Transaction {
+    constructor(db) {
+        this._db = db;
+        this._request = new Db.reqClass(this._db.config);
+        this.aborted = false;
+        this.commited = false;
+        this.inited = false;
+    }
+    async init() {
+        const res = await this._request.send(START);
+        if (res.code) {
+            throw res;
+        }
+        this.inited = true;
+        this._id = res.transactionId;
+    }
+    collection(collName) {
+        if (!collName) {
+            throw new Error('Collection name is required');
+        }
+        return new CollectionReference(this._db, collName, {}, this._id);
+    }
+    getTransactionId() {
+        return this._id;
+    }
+    getRequestMethod() {
+        return this._request;
+    }
+    async commit() {
+        const param = {
+            transactionId: this._id
+        };
+        const res = await this._request.send(COMMIT, param);
+        if (res.code)
+            throw res;
+        this.commited = true;
+        return res;
+    }
+    async rollback(customRollbackRes) {
+        const param = {
+            transactionId: this._id
+        };
+        const res = await this._request.send(ABORT, param);
+        if (res.code)
+            throw res;
+        this.aborted = true;
+        this.abortReason = customRollbackRes;
+        return res;
+    }
+}
+export async function startTransaction() {
+    const transaction = new Transaction(this);
+    await transaction.init();
+    return transaction;
+}
+export async function runTransaction(callback, times = 3) {
+    let transaction;
+    try {
+        transaction = new Transaction(this);
+        await transaction.init();
+        const callbackRes = await callback(transaction);
+        if (transaction.aborted === true) {
+            throw transaction.abortReason;
+        }
+        await transaction.commit();
+        return callbackRes;
+    }
+    catch (error) {
+        if (transaction.inited === false) {
+            throw error;
+        }
+        const throwWithRollback = async (error) => {
+            if (!transaction.aborted && !transaction.commited) {
+                try {
+                    await transaction.rollback();
+                }
+                catch (err) {
+                }
+                throw error;
+            }
+            if (transaction.aborted === true) {
+                throw transaction.abortReason;
+            }
+            throw error;
+        };
+        if (times <= 0) {
+            await throwWithRollback(error);
+        }
+        if (error && error.code === ERRORS.DATABASE_TRANSACTION_CONFLICT.code) {
+            return await runTransaction.bind(this)(callback, --times);
+        }
+        await throwWithRollback(error);
+    }
+}

@@ -45,7 +45,7 @@
     },
     "compileType": "miniprogram",
     "libVersion": "2.14.1",
-    "appid": "wx94cf2bb54954ac78",
+    "appid": "wx461db390b6650bea",
     "projectname": "DailyMissions",
     "miniprogramRoot": "miniprogram/",
     "cloudfunctionRoot": "cloudfunctions/",

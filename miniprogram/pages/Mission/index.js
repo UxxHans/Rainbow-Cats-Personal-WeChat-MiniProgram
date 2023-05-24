@@ -167,8 +167,8 @@ Page({
     await wx.cloud.callFunction({name: 'getOpenId'}).then(async openid => {
       if(mission._openid != openid.result){
         //完成对方任务，奖金打入对方账号
-        wx.cloud.callFunction({name: 'editAvailable', data: {_id: mission._id, value: false, list: getApp().globalData.collectionMissionList}})
-        wx.cloud.callFunction({name: 'editCredit', data: {_openid: mission._openid, value: mission.credit, list: getApp().globalData.collectionUserList}})
+        await wx.cloud.callFunction({name: 'editAvailable', data: {_id: mission._id, value: false, list: getApp().globalData.collectionMissionList}})
+        await wx.cloud.callFunction({name: 'editCredit', data: {_openid: mission._openid, value: mission.credit, list: getApp().globalData.collectionUserList}})
 
         //触发显示更新
         mission.available = false

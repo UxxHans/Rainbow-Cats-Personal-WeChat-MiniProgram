@@ -1,0 +1,10 @@
+# QCIFile的命名推荐：qcifile.yml，推荐放于代码库的根目录中
+
+version: 1.0                            # QCIFile版本号，自己指定
+worker:
+  label: tcb
+stages:
+    - stage: testQCI                    # 自定义stage的名称，多个stage为顺序执行
+      cmds:                             # 多条命令顺序执行
+          - tnpm install
+          - npm test
