@@ -33,5 +33,6 @@
       </view>
     </view>
   </view>
-
+  <view bindtap="requestSubscribeMessage">接收服务通知</view>
+  
 </view>

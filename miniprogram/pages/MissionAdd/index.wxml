@@ -22,6 +22,6 @@
 
   <view class="footer">
     <view class="reset" bindtap="resetMission">重置</view>
-    <view class="save" bindtap="saveMission">保存</view>
+    <view class="save" bindtap="handleTap">保存</view>
   </view>
 </view>
