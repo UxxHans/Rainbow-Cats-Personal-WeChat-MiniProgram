@@ -57,6 +57,7 @@ module.exports = {
 >![Image](Pics/CloudFunction.jpg)
 - 如果云开发里面的云函数页面是这样的就是成功了
 >![Image](Pics/CloudFunctionList.jpg)
+
 - 没有安装npm或者NodeJs, 需要先在这里安装: https://nodejs.org/dist/v16.15.1/node-v16.15.1-x64.msi
 - 安装好的，就直接运行`cloudfunctions/Install-WX-Server-SDK.bat` 
 - 不成功的话可以在命令行输入 `npm install --save wx-server-sdk@latest`
@@ -67,6 +68,11 @@ module.exports = {
 - 把这两个记录下来的`_openid`拷贝到`miniprogram/app.js`里的`_openidA`和`_openidB`的值里(A是卡比，B是瓦豆)
 - 在`miniprogram/app.js`里把`userA`和`userB`改成自己和女朋友的名字
 - 然后再试试看是不是成功了! (别忘了任务和物品**左滑**可以完成和购买)
+- 消息提醒功能：
+- 参考https://blog.csdn.net/hell_orld/article/details/110675777?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522168490366016800180699170%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=168490366016800180699170&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-110675777-null-null.142^v87^insert_down28v1,239^v2^insert_chatgpt&utm_term=%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%9A%E7%9F%A5%E4%BA%91%E5%BC%80%E5%8F%91&spm=1018.2226.3001.4187配置自己想要的模板
+- 在`miniprogram/pages/MainPage/index.js`和`miniprogram/pages/MissionAdd/index.js`里把模板号换成自己想要的模板号
+- 在`cloudfunctions/information/index.js`里把UserA和UserB的openid值进行修改就能使用消息提醒功能了
+>![Image](Pics/information.jpg)
 - 别忘了最后点击右上角上传->然后在开发者账号上设置小程序为**体验版**->不用去发布去审核
 >![Image](Pics/UploadOption.jpg)
 - 最后如果有兴趣可以继续深入开发, 开发文档: https://developers.weixin.qq.com/miniprogram/dev/component/
