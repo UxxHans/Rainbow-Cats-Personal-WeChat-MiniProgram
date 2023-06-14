@@ -14,11 +14,23 @@ exports.main = async (event, context) => {
         openid = '这里改成A的openid';//_openidA放到单引号里
     }
 
+
+
+    let taskName = '叮咚～任务更新提醒'
+    // 获取发布任务最后一条信息进行推送
+    await cloud.callFunction({ name: 'getList', data: { list: 'MissionList' } }).then(res => {
+        const { data } = res.result
+        const task = data.filter(task => task._openid == openid)
+        if (task.length) {
+            taskName = task[task.length - 1].title
+        }
+    })
+
     const result = await cloud.openapi.subscribeMessage.send({
       touser: openid, // 发送通知给谁的openid(把上面挑好就行，这块不用动)
       data: {
         thing6: {
-          value: '叮咚～任务更新提醒'
+          value: taskName
         },
         thing9: {
           value: '你的宝r在努力学习哦'
